@@ -1,0 +1,7 @@
+dependencies {
+    implementation(project(":batch-service"))
+    testImplementation(testFixtures(project(":batch-test-fixture")))
+
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    testImplementation('org.springframework.batch:spring-batch-test')
+}

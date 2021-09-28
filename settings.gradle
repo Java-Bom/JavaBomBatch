@@ -1,0 +1,6 @@
+rootProject.name = 'bom-batch'
+include 'batch-test-fixture'
+include 'batch-service'
+include 'definitive-guide'
+
+
