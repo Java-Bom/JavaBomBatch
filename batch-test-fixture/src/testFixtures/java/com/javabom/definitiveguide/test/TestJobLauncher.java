@@ -9,11 +9,16 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.context.ApplicationContext;
 
-@RequiredArgsConstructor
 public class TestJobLauncher {
     private final ApplicationContext applicationContext;
     private final JobRepository jobRepository;
     private final JobLauncher jobLauncher;
+
+    public TestJobLauncher(ApplicationContext applicationContext, JobRepository jobRepository, JobLauncher jobLauncher) {
+        this.applicationContext = applicationContext;
+        this.jobRepository = jobRepository;
+        this.jobLauncher = jobLauncher;
+    }
 
     public JobExecution launchJob(String jobName, JobParameters jobParameters) {
         Job job = applicationContext.getBean(jobName, Job.class);
