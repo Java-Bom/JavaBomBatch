@@ -1,6 +1,5 @@
 package com.javabom.definitiveguide.test;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -24,6 +23,15 @@ public class TestJobLauncher {
         Job job = applicationContext.getBean(jobName, Job.class);
         try {
             return getJobLauncherTestUtils(job).launchJob(jobParameters);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public JobExecution launchStep(String jobName, String stepName, JobParameters jobParameters) {
+        Job job = applicationContext.getBean(jobName, Job.class);
+        try {
+            return getJobLauncherTestUtils(job).launchStep(stepName, jobParameters);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

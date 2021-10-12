@@ -15,5 +15,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Import(BatchTestConfig.class)
 @SpringBootTest(classes = DefiniteGuideBatchApplication.class)
-public @interface BatchSpringTest {
+@SpringBatchTest
+public @interface BatchStepTest {
 }
