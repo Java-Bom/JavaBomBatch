@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
 	"com.javabom.definitiveguide.chap2",
 	"com.javabom.definitiveguide.chap13",
 	"com.javabom.definitiveguide.chap4",
-	"com.javabom.definitiveguide.chap5"
+	"com.javabom.definitiveguide.chap5",
+	"com.javabom.definitiveguide.chap6"
 })
 public class DefiniteBatchConfig {
 }
