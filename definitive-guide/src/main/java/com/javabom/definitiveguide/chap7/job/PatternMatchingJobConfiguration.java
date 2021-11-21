@@ -96,7 +96,18 @@ public class PatternMatchingJobConfiguration {
 
     @Bean
     public CustomerFileReader customerFileReader() {
-        return new CustomerFileReader(customerMultiItemReader());
+        return new CustomerFileReader(customerTransactionsItemReader(null));
+    }
+
+    @Bean
+    @StepScope
+    public FlatFileItemReader customerTransactionsItemReader(
+            @Value("#{jobParameters['customerFile']}") ClassPathResource inputFile) {
+        return new FlatFileItemReaderBuilder<CustomerTransactions>()
+                .name("customerTransactionsItemReader")
+                .lineMapper(customerTransactionsLineMapper())
+                .resource(inputFile)
+                .build();
     }
 
     @Bean
@@ -117,14 +128,6 @@ public class PatternMatchingJobConfiguration {
         lineMapper.setFieldSetMappers(fieldSetMapperMap);
 
         return lineMapper;
-    }
-
-    @Bean
-    public FlatFileItemReader customerMultiItemReader() {
-        return new FlatFileItemReaderBuilder<CustomerTransactions>()
-                .name("customerMultiItemReader")
-                .lineMapper(customerTransactionsLineMapper())
-                .build();
     }
 
     @Bean(name = "third" + STEP_NAME)
@@ -153,13 +156,10 @@ public class PatternMatchingJobConfiguration {
     }
 
     @Bean
-    @StepScope
-    public FlatFileItemReader customerTransactionsItemReader(
-            @Value("#{jobParameters['customerFile']}") ClassPathResource inputFile) {
+    public FlatFileItemReader customerMultiItemReader() {
         return new FlatFileItemReaderBuilder<CustomerTransactions>()
-                .name("customerTransactionsItemReader")
+                .name("customerMultiItemReader")
                 .lineMapper(customerTransactionsLineMapper())
-                .resource(inputFile)
                 .build();
     }
 
