@@ -2,14 +2,16 @@ package com.javabom.definitiveguide.chap7.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-@XmlRootElement(name = "customer")
+@XmlRootElement(name = "customer") //매칭되는 리먼트 지정
 @Getter
+@Setter
 @NoArgsConstructor
 public class CustomerXML {
 
@@ -22,36 +24,8 @@ public class CustomerXML {
     private String zipCode;
     private List<Transaction> transactionList;
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setMiddleInitial(String middleInitial) {
-        this.middleInitial = middleInitial;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    @XmlElementWrapper(name = "transactions")
-    @XmlElement(name = "transaction")
+    @XmlElementWrapper(name = "transactions") // 감싸져 있는 앨리먼트앨 지정
+    @XmlElement(name = "transaction") //컬렉션 내 각 앨리먼트 지정
     public void setTransactionList(List<Transaction> transactionList) {
         this.transactionList = transactionList;
     }

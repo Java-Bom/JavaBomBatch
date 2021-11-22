@@ -39,7 +39,7 @@ public class XMLJobConfiguration {
         return this.stepBuilderFactory.get(STEP_NAME)
                 .<CustomerXML, CustomerXML>chunk(10)
                 .reader(XMLFileReader(null))
-                .writer(XMLitemWriter())
+                .writer(XMLItemWriter())
                 .build();
     }
 
@@ -59,12 +59,12 @@ public class XMLJobConfiguration {
     @Bean
     public Jaxb2Marshaller customerMarshaller() {
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-        jaxb2Marshaller.setClassesToBeBound(new Class[]{CustomerXML.class, Transaction.class});
+        jaxb2Marshaller.setClassesToBeBound(new Class[]{CustomerXML.class});
         return jaxb2Marshaller;
     }
 
     @Bean
-    public ItemWriter XMLitemWriter() {
+    public ItemWriter XMLItemWriter() {
         return (items) -> items.forEach(System.out::println);
     }
 }

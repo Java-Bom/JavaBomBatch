@@ -56,7 +56,7 @@ public class JsonJobConfiguration {
         jsonObjectReader.setMapper(objectMapper);
 
         return new JsonItemReaderBuilder<CustomerTransactions>()
-                .name("customerFileReader")
+                .name("jsonFileReader")
                 .jsonObjectReader(jsonObjectReader)
                 .resource(inputFile)
                 .build();

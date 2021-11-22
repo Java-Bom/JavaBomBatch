@@ -30,7 +30,7 @@ public class DelimitedJobConfiguration {
     @Bean(name = JOB_NAME)
     public Job job() {
         return this.jobBuilderFactory.get(JOB_NAME)
-                .start(mapperFileStep())
+                .start(quoteFileStep())
                 .build();
     }
 
