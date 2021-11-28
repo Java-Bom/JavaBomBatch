@@ -3,6 +3,7 @@ package com.javabom.definitiveguide.config;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
 @EnableBatchProcessing // 애플리케이션 내에서 한 번만 적용됨
@@ -13,7 +14,9 @@ import org.springframework.context.annotation.Configuration;
         "com.javabom.definitiveguide.chap5",
         "com.javabom.definitiveguide.chap6",
         "com.javabom.definitiveguide.chap7"
-
+})
+@Import(value = {
+        CustomDataSourceConfig.class
 })
 public class DefiniteBatchConfig {
 }

@@ -4,6 +4,7 @@ import com.javabom.definitiveguide.chap6.domain.Transaction;
 import com.javabom.definitiveguide.chap6.job.TransactionProcessingJob;
 import com.javabom.definitiveguide.test.BatchSpringTest;
 import com.javabom.definitiveguide.test.TestJobLauncher;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
@@ -27,6 +28,7 @@ import java.sql.Statement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled("TODO 방기현")
 @ActiveProfiles("mysql")
 @BatchSpringTest
 public class TransactionProcessingJobTest {
