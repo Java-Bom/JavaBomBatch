@@ -63,7 +63,7 @@ class JdbcCustomerCursorReadJobConfigurationTest {
         //when
         JobExecution execution = jobLauncher.launchJob(JdbcCustomerCursorReadJobConfiguration.JOB_NAME,
                 new JobParametersBuilder()
-                        .addString("city", "city")
+                        .addString("city", "city2")
                         .toJobParameters());
 
         //then

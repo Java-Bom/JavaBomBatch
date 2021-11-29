@@ -2,7 +2,6 @@ package com.javabom.definitiveguide.chap7.service;
 
 
 import com.javabom.service.domain.customer.entity.CustomerEntity;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,14 @@ public class CustomerStubService {
         for (int i = 0; i < 100; i++) {
             customers.add(buildCustomer((long) i));
         }
+    }
+
+    public int getCurIndex() {
+        return curIndex;
+    }
+
+    public void setCurIndex(int curIndex) {
+        this.curIndex = curIndex;
     }
 
     private CustomerEntity buildCustomer(Long id) {

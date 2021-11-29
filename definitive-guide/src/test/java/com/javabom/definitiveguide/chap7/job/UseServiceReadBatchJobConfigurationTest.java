@@ -31,4 +31,16 @@ class UseServiceReadBatchJobConfigurationTest {
         assertThat(execution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
     }
 
+    @Test
+    void 기존서비스를_스트림리더로_변경하여_사용하는_배치_테스트() {
+        //when
+        JobExecution execution = jobLauncher.launchJob(UseServiceReadBatchJobV2Configuration.JOB_NAME,
+                new JobParametersBuilder()
+                        .toJobParameters()
+        );
+
+        //then
+        assertThat(execution.getExitStatus()).isEqualTo(ExitStatus.COMPLETED);
+        assertThat(execution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
+    }
 }
