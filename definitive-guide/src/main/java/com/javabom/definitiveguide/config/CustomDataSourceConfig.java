@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.lang.Nullable;
 
-@Profile("!mysql")
+@Profile({"!mysql"})
 @Configuration
 public class CustomDataSourceConfig {
     private static final String DATASOURCE_CONFIG = "spring.datasource.hikari";
