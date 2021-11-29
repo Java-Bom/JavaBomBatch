@@ -15,7 +15,6 @@ import org.springframework.batch.core.JobParametersBuilder;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @BatchSpringTest
@@ -40,6 +39,7 @@ class JpaItemReaderJobConfigurationTest {
             customerRepository.save(customerEntity);
         }
     }
+
     @AfterEach
     void tearDown() {
         customerRepository.deleteAllInBatch();

@@ -57,4 +57,17 @@ class JdbcCustomerCursorReadJobConfigurationTest {
         assertThat(execution.getExitStatus()).isEqualTo(ExitStatus.COMPLETED);
         assertThat(execution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
     }
+
+    @Test
+    void 아무것도_읽은것이_없다면_실패처리() {
+        //when
+        JobExecution execution = jobLauncher.launchJob(JdbcCustomerCursorReadJobConfiguration.JOB_NAME,
+                new JobParametersBuilder()
+                        .addString("city", "city")
+                        .toJobParameters());
+
+        //then
+        assertThat(execution.getExitStatus()).isEqualTo(ExitStatus.FAILED);
+        assertThat(execution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
+    }
 }

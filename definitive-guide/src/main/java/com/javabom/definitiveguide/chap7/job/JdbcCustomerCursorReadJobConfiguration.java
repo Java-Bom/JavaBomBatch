@@ -1,5 +1,6 @@
 package com.javabom.definitiveguide.chap7.job;
 
+import com.javabom.definitiveguide.chap7.job.listener.EmptyInputStepFailer;
 import com.javabom.definitiveguide.chap7.mapper.CustomerJdbcRowMapper;
 import com.javabom.definitiveguide.chap7.model.CustomerJdbc;
 import lombok.RequiredArgsConstructor;
@@ -39,15 +40,20 @@ public class JdbcCustomerCursorReadJobConfiguration {
                 .build();
     }
 
+    @Bean("jdbcEmptyInputStepFailer")
+    public EmptyInputStepFailer jdbcEmptyInputStepFailer(){
+        return new EmptyInputStepFailer();
+    }
+
     @Bean(STEP_NAME)
     public Step jdbcCustomerCursorReadStep() {
         return stepBuilderFactory.get(STEP_NAME)
                 .<CustomerJdbc, CustomerJdbc>chunk(100)
                 .reader(customerJdbcCursorItemReader(dataSource))
                 .writer(customerJdbcCursorItemWriter())
+                .listener(jdbcEmptyInputStepFailer())
                 .build();
     }
-
 
     @Bean(CURSOR_READER_NAME)
     public JdbcCursorItemReader<CustomerJdbc> customerJdbcCursorItemReader(DataSource dataSource) {
