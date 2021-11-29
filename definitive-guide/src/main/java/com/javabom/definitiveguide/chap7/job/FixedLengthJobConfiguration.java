@@ -1,5 +1,6 @@
 package com.javabom.definitiveguide.chap7.job;
 
+import com.javabom.definitiveguide.chap7.job.listener.CustomerItemReadErrorListener;
 import com.javabom.definitiveguide.chap7.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -33,12 +34,21 @@ public class FixedLengthJobConfiguration {
                 .build();
     }
 
+    @Bean("copyFileStepListener")
+    public CustomerItemReadErrorListener copyFileStepListener() {
+        return new CustomerItemReadErrorListener();
+    }
+
     @Bean(name = STEP_NAME)
     public Step copyFileStep() {
         return this.stepBuilderFactory.get(STEP_NAME)
                 .<Customer, Customer>chunk(10)
                 .reader(fixedLengthCustomerItemReader(null))
                 .writer(itemWriter())
+                .faultTolerant()
+                .skip(Exception.class)
+                .skipLimit(10)
+                .listener(copyFileStepListener())
                 .build();
     }
 

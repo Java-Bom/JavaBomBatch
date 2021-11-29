@@ -1,5 +1,7 @@
 spring:
-  profiles: mysql
+  config:
+    activate:
+      on-profile: mysql
   datasource:
     url: jdbc:mysql://localhost:13306/spring_batch
     username: 'root'

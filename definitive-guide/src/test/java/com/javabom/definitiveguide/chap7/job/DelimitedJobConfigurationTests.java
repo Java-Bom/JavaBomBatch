@@ -2,6 +2,7 @@ package com.javabom.definitiveguide.chap7.job;
 
 import com.javabom.definitiveguide.test.BatchSpringTest;
 import com.javabom.definitiveguide.test.TestJobLauncher;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.BatchStatus;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled("TODO 방기현")
 @BatchSpringTest
 class DelimitedJobConfigurationTests {
 
