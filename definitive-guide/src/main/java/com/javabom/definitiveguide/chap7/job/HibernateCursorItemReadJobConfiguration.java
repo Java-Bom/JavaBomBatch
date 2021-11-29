@@ -22,7 +22,7 @@ import java.util.Collections;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class HibernateCursorItemReadJob {
+public class HibernateCursorItemReadJobConfiguration {
     public static final String JOB_NAME = "HibernateCustomerCursorReadJob";
     private static final String STEP_NAME = JOB_NAME + "Step";
     private static final String CURSOR_READER_NAME = STEP_NAME + "Reader";

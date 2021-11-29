@@ -2,7 +2,6 @@ package com.javabom.definitiveguide.chap7.job;
 
 import com.javabom.definitiveguide.chap7.mapper.CustomerJdbcRowMapper;
 import com.javabom.definitiveguide.chap7.model.CustomerJdbc;
-import com.sun.istack.internal.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

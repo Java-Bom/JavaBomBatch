@@ -12,20 +12,18 @@ import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@ActiveProfiles("hibernate")
 @BatchSpringTest
-class HibernateItemReadJobTest {
-
+class JpaItemReaderJobConfigurationTest {
     private final TestJobLauncher jobLauncher;
     private final CustomerJpaRepository customerRepository;
 
-    public HibernateItemReadJobTest(TestJobLauncher jobLauncher, CustomerJpaRepository customerRepository) {
+    public JpaItemReaderJobConfigurationTest(TestJobLauncher jobLauncher, CustomerJpaRepository customerRepository) {
         this.jobLauncher = jobLauncher;
         this.customerRepository = customerRepository;
     }
@@ -42,16 +40,15 @@ class HibernateItemReadJobTest {
             customerRepository.save(customerEntity);
         }
     }
-
     @AfterEach
     void tearDown() {
         customerRepository.deleteAllInBatch();
     }
 
     @Test
-    void 하이버네이트_커서_리더_테스트() {
+    void JPA_커서_리더_테스트() {
         //when
-        JobExecution execution = jobLauncher.launchJob(HibernateCursorItemReadJobConfiguration.JOB_NAME,
+        JobExecution execution = jobLauncher.launchJob(JpaCursorItemReaderJobConfiguration.JOB_NAME,
                 new JobParametersBuilder()
                         .addString("city", "인천")
                         .toJobParameters()
@@ -63,9 +60,9 @@ class HibernateItemReadJobTest {
     }
 
     @Test
-    void 하이버네이트_페이징_리더_테스트() {
+    void JPA_페이징_리더_테스트() {
         //when
-        JobExecution execution = jobLauncher.launchJob(HibernatePagingItemReadJobConfiguration.JOB_NAME,
+        JobExecution execution = jobLauncher.launchJob(JpaPagingItemReaderJobConfiguration.JOB_NAME,
                 new JobParametersBuilder()
                         .addString("city", "인천")
                         .toJobParameters()
@@ -76,3 +73,4 @@ class HibernateItemReadJobTest {
         assertThat(execution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
     }
 }
+

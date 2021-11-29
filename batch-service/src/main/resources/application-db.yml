@@ -17,7 +17,9 @@ spring:
 ---
 
 spring:
-  profiles: local, test
+  config:
+    activate:
+      on-profile: local, test
   jpa:
     database-platform: H2
     show-sql: true

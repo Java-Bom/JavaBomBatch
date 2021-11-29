@@ -14,12 +14,14 @@ spring:
     open-in-view: false
 ---
 spring:
+  config:
+    activate:
+      on-profile: local, test, hibernate
   jpa:
     database-platform: H2
     show-sql: true
     hibernate:
       ddl-auto: update
-  profiles: local, test, hibernate
   datasource:
     init-schema: file:./db/migration/schema.sql
     hikari:
