@@ -2,7 +2,6 @@ package com.javabom.definitiveguide.chap7.job;
 
 import com.javabom.definitiveguide.test.BatchSpringTest;
 import com.javabom.definitiveguide.test.TestJobLauncher;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.*;
@@ -13,7 +12,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled("TODO 방기현")
 @BatchSpringTest
 class PatternMatchingJobConfigurationTests {
 
@@ -47,7 +45,7 @@ class PatternMatchingJobConfigurationTests {
                 .toJobParameters();
 
         //when
-        final JobExecution execution = jobLauncher.launchJob(PatternMatchingJobConfiguration.JOB_NAME, jobParameters);
+        final JobExecution execution = jobLauncher.launchJob(CustomReaderJobConfiguration.JOB_NAME, jobParameters);
         final List<StepExecution> stepExecutions = new ArrayList<>(execution.getStepExecutions());
 
         //then
@@ -68,7 +66,7 @@ class PatternMatchingJobConfigurationTests {
                 .toJobParameters();
 
         //when
-        final JobExecution execution = jobLauncher.launchJob(PatternMatchingJobConfiguration.JOB_NAME, jobParameters);
+        final JobExecution execution = jobLauncher.launchJob(MultiFileReaderJobConfiguration.JOB_NAME, jobParameters);
         final List<StepExecution> stepExecutions = new ArrayList<>(execution.getStepExecutions());
 
         //then
