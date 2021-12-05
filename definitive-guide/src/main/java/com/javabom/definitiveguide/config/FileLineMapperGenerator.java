@@ -1,4 +1,4 @@
-package com.javabom.definitiveguide.chap13.test;
+package com.javabom.definitiveguide.config;
 
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class FileLineMapperGenerator {
 
-    static <T> LineMapper<T> generateLineMapper(Class<T> value, String separator) {
+    public static <T> LineMapper<T> generateLineMapper(Class<T> value, String separator) {
         DefaultLineMapper<T> lineMapper = new DefaultLineMapper<>();
 
         List<String> fieldNames = extractFieldNames(value.getDeclaredFields());

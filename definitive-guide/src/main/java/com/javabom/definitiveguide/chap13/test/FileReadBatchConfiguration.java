@@ -1,5 +1,6 @@
 package com.javabom.definitiveguide.chap13.test;
 
+import com.javabom.definitiveguide.config.FileLineMapperGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
