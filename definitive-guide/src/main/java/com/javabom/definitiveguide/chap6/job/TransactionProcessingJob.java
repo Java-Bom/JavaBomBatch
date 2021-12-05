@@ -103,8 +103,8 @@ public class TransactionProcessingJob {
                 .sql("SELECT ACCOUNT_NUMBER, CURRENT_BALANCE " +
                         "FROM ACCOUNT_SUMMARY A " +
                         "WHERE A.ID IN (" +
-                        "	SELECT DISTINCT T.ACCOUNT_SUMMARY_ID " +
-                        "	FROM TRANSACTION T) " +
+                        "SELECT DISTINCT T.ACCOUNT_NUMBER " +
+                        "FROM TRANSACTION T) " +
                         "ORDER BY A.ACCOUNT_NUMBER")
                 .rowMapper((resultSet, rowNumber) -> {
                     AccountSummary accountSummary = new AccountSummary();
@@ -170,9 +170,9 @@ public class TransactionProcessingJob {
         return new JdbcBatchItemWriterBuilder<Transaction>()
                 .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .sql("INSERT INTO TRANSACTION " +
-                        "(ACCOUNT_SUMMARY_ID, TIMESTAMP, AMOUNT) " +
+                        "(ACCOUNT_NUMBER, TIMESTAMP, AMOUNT) " +
                         "VALUES ((SELECT ID FROM ACCOUNT_SUMMARY " +
-                        "	WHERE ACCOUNT_NUMBER = :accountNumber), " +
+                        "WHERE ACCOUNT_NUMBER = :accountNumber), " +
                         ":timestamp, :amount)")
                 .dataSource(dataSource)
                 .build();
