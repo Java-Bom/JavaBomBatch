@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled("TODO 방기현")
 @BatchSpringTest
 class DelimitedJobConfigurationTests {
 
@@ -44,7 +43,7 @@ class DelimitedJobConfigurationTests {
                 .toJobParameters();
 
         //when
-        final JobExecution execution = jobLauncher.launchJob(DelimitedJobConfiguration.JOB_NAME, jobParameters);
+        final JobExecution execution = jobLauncher.launchJob(QuoteJobConfiguration.JOB_NAME, jobParameters);
 
         //then
         assertThat(execution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
@@ -59,7 +58,7 @@ class DelimitedJobConfigurationTests {
                 .toJobParameters();
 
         //when
-        final JobExecution execution = jobLauncher.launchJob(DelimitedJobConfiguration.JOB_NAME, jobParameters);
+        final JobExecution execution = jobLauncher.launchJob(MapperJobConfiguration.JOB_NAME, jobParameters);
 
         //then
         assertThat(execution.getStatus()).isEqualTo(BatchStatus.COMPLETED);

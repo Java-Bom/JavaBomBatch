@@ -8,7 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Transaction {
-    private String accountNumber;
+    private int accountNumber;
     private Date timestamp;
     private double amount;
 }

@@ -4,6 +4,8 @@ import com.javabom.definitiveguide.chap6.domain.Transaction;
 import com.javabom.definitiveguide.chap6.job.TransactionProcessingJob;
 import com.javabom.definitiveguide.test.BatchSpringTest;
 import com.javabom.definitiveguide.test.TestJobLauncher;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
@@ -28,26 +30,37 @@ import java.sql.Statement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled("TODO 방기현")
-@ActiveProfiles("mysql")
 @BatchSpringTest
 public class TransactionProcessingJobTest {
 
     private static final String INSERT_SQL = "INSERT INTO ACCOUNT_SUMMARY(account_number, current_balance) VALUES (?, ?)";
+
     @Autowired
     private TestJobLauncher testJobLauncher;
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @BeforeEach
+    public void setUp() {
+        jdbcTemplate.execute("CREATE TABLE ACCOUNT_SUMMARY (id INT, account_number VARCHAR, current_balance VARCHAR)");
+        jdbcTemplate.execute("CREATE TABLE TRANSACTION (account_number INT, timestamp TIMESTAMP, amount DOUBLE)");
+    }
+
+    @AfterEach
+    public void teardown() {
+        jdbcTemplate.execute("DROP TABLE ACCOUNT_SUMMARY");
+        jdbcTemplate.execute("DROP TABLE TRANSACTION");
+    }
+
     @Test
     public void migrationTransactionAccountNumber() throws IOException {
-        Path path = Paths.get("src/main/resources/input/transactionFile.csv");
         File transactionFile = new ClassPathResource("input/transactionFile.csv").getFile();
         String[] transactions = new String(Files.readAllBytes(transactionFile.toPath())).split("\n");
         for (String transaction : transactions) {
             String[] row = transaction.split(",");
             Transaction t = new Transaction();
-            t.setAccountNumber(row[0]);
+            t.setAccountNumber(Integer.parseInt(row[0]));
             t.setAmount(0);
             jdbcTemplate.update(new PreparedStatementCreator() {
                 @Override
@@ -65,7 +78,7 @@ public class TransactionProcessingJobTest {
     public void transactionTest() {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("transactionFile", "input/transactionFile.csv")
-                .addString("summaryFile", "file:///{summaryFilePath}")
+                .addString("summaryFile", "input/summaryFile.csv")
                 .toJobParameters();
         JobExecution jobExecution = testJobLauncher.launchJob(TransactionProcessingJob.JOB_NAME, jobParameters);
 

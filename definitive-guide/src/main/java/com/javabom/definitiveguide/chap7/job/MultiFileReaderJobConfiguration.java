@@ -2,7 +2,6 @@ package com.javabom.definitiveguide.chap7.job;
 
 import com.javabom.definitiveguide.chap7.job.reader.CustomerFileReader;
 import com.javabom.definitiveguide.chap7.mapper.TransactionFieldSetMapper;
-import com.javabom.definitiveguide.chap7.model.CustomerAddress;
 import com.javabom.definitiveguide.chap7.model.CustomerTransactions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -30,10 +29,10 @@ import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
-public class PatternMatchingJobConfiguration {
+public class MultiFileReaderJobConfiguration {
 
-    public static final String JOB_NAME = "chap7_pattern_matching_job";
-    public static final String STEP_NAME = "chap7_pattern_matching_step";
+    public static final String JOB_NAME = "chap7_multi_reader_job";
+    public static final String STEP_NAME = "chap7_multi_reader_step";
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
@@ -41,39 +40,52 @@ public class PatternMatchingJobConfiguration {
     @Bean(name = JOB_NAME)
     public Job job() {
         return this.jobBuilderFactory.get(JOB_NAME)
-                .start(customAddressLineTokenizerFileStep())
+                .start(customMultiFileStep())
                 .build();
     }
 
-    @Bean(name = "first" + STEP_NAME)
-    public Step customAddressLineTokenizerFileStep() {
-        return this.stepBuilderFactory.get("first" + STEP_NAME)
-                .<CustomerAddress, CustomerAddress>chunk(10)
-                .reader(patternMatchingItemReader(null))
+    @Bean(name = STEP_NAME)
+    public Step customMultiFileStep() {
+        return this.stepBuilderFactory.get(STEP_NAME)
+                .<CustomerTransactions, CustomerTransactions>chunk(10)
+                .reader(customerMultiFileItemReader(null))
                 .writer(patternMatchingItemWriter())
                 .build();
     }
 
     @Bean
     @StepScope
-    public FlatFileItemReader patternMatchingItemReader(
-            @Value("#{jobParameters['customerFile']}") ClassPathResource inputFile) {
-        return new FlatFileItemReaderBuilder<CustomerAddress>()
-                .name("patternMatchingItemReader")
-                .lineMapper(patternMatchingLineMapper())
-                .resource(inputFile)
+    public MultiResourceItemReader customerMultiFileItemReader(
+            @Value("#{jobParameters['customerFile']}") ClassPathResource[] inputFiles) {
+        return new MultiResourceItemReaderBuilder<>()
+                .name("customerMultiFileItemReader")
+                .resources(inputFiles)
+                .delegate(customerMultiFileReader())
                 .build();
     }
 
     @Bean
-    public PatternMatchingCompositeLineMapper patternMatchingLineMapper() {
+    public CustomerFileReader customerMultiFileReader() {
+        return new CustomerFileReader(customerMultiItemReader());
+    }
+
+    @Bean
+    public FlatFileItemReader customerMultiItemReader() {
+        return new FlatFileItemReaderBuilder<CustomerTransactions>()
+                .name("customerMultiItemReader")
+                .lineMapper(customerTransactionsLineMapper())
+                .build();
+    }
+
+    @Bean(name = "multiFile_custom_transaction_line_mapper")
+    public PatternMatchingCompositeLineMapper customerTransactionsLineMapper() {
         Map<String, LineTokenizer> lineTokenizerMap = new HashMap<>(2);
         lineTokenizerMap.put("CUST*", customerLineTokenizer()); //고객 정보 포맷
         lineTokenizerMap.put("TRANS*", transactionLineTokenizer()); //거래 레코드 포맷
 
         Map<String, FieldSetMapper> fieldSetMapperMap = new HashMap<>(2);
-        BeanWrapperFieldSetMapper<CustomerAddress> customerFieldSetMapper = new BeanWrapperFieldSetMapper<>();
-        customerFieldSetMapper.setTargetType(CustomerAddress.class);
+        BeanWrapperFieldSetMapper<CustomerTransactions> customerFieldSetMapper = new BeanWrapperFieldSetMapper<>();
+        customerFieldSetMapper.setTargetType(CustomerTransactions.class);
 
         fieldSetMapperMap.put("CUST*", customerFieldSetMapper);
         fieldSetMapperMap.put("TRANS*", new TransactionFieldSetMapper());
@@ -85,7 +97,7 @@ public class PatternMatchingJobConfiguration {
         return lineMapper;
     }
 
-    @Bean
+    @Bean(name = "multiFile_custom_line_tokenizer")
     public DelimitedLineTokenizer customerLineTokenizer() {
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
         lineTokenizer.setNames("firstName",
@@ -99,14 +111,14 @@ public class PatternMatchingJobConfiguration {
         return lineTokenizer;
     }
 
-    @Bean
+    @Bean(name = "multiFile_transaction_line_tokenizer")
     public DelimitedLineTokenizer transactionLineTokenizer() {
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
         lineTokenizer.setNames("prefix", "accountNumber", "transactionDate", "amount");
         return lineTokenizer;
     }
 
-    @Bean(name = "pattern_matching_item_writer")
+    @Bean(name = "multi_item_writer")
     public ItemWriter patternMatchingItemWriter() {
         return (items -> items.forEach(System.out::println));
     }

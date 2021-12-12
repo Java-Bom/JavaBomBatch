@@ -1,8 +1,6 @@
 package com.javabom.definitiveguide.chap7.job;
 
-import com.javabom.definitiveguide.chap7.mapper.CustomerFieldSetMapper;
 import com.javabom.definitiveguide.chap7.model.Customer;
-import com.javabom.definitiveguide.chap7.model.CustomerAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -19,10 +17,10 @@ import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 @RequiredArgsConstructor
-public class DelimitedJobConfiguration {
+public class QuoteJobConfiguration {
 
-    public static final String JOB_NAME = "chap7_delimited_job";
-    public static final String STEP_NAME = "chap7_delimited_step";
+    public static final String JOB_NAME = "chap7_quote_job";
+    public static final String STEP_NAME = "chap7_quote_step";
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
@@ -30,35 +28,35 @@ public class DelimitedJobConfiguration {
     @Bean(name = JOB_NAME)
     public Job job() {
         return this.jobBuilderFactory.get(JOB_NAME)
-                .start(delimitedFileStep())
+                .start(quoteFileStep())
                 .build();
     }
 
-    @Bean(name = "delimited" + STEP_NAME)
-    public Step delimitedFileStep() {
-        return this.stepBuilderFactory.get("delimited" + STEP_NAME)
+    @Bean(name = STEP_NAME)
+    public Step quoteFileStep() {
+        return this.stepBuilderFactory.get(STEP_NAME)
                 .<Customer, Customer>chunk(10)
-                .reader(delimitedCustomerItemReader(null))
+                .reader(quoteDelimitedCustomerItemReader(null))
                 .writer(itemWriter())
                 .build();
     }
 
     @Bean
     @StepScope
-    public FlatFileItemReader<Customer> delimitedCustomerItemReader(
+    public FlatFileItemReader<Customer> quoteDelimitedCustomerItemReader(
             @Value("#{jobParameters['customerFile']}") ClassPathResource inputFile) {
         return new FlatFileItemReaderBuilder<Customer>()
-                .name("delimitedCustomerItemReader")
+                .name("quoteDelimitedCustomerItemReader")
                 .resource(inputFile)
-                .delimited()//default: 쉼표(,)
+                .delimited()
+                .quoteCharacter('#')
                 .names("firstName", "middleInitial", "lastName",
-                        "addressNumber", "street", "city", "state",
-                        "zipCode")
+                        "addressNumber", "street", "city", "state")
                 .targetType(Customer.class)
                 .build();
     }
 
-    @Bean(name = "delimited_item_writer")
+    @Bean(name = "quote_item_writer")
     public ItemWriter<Customer> itemWriter() {
         return (items -> items.forEach(System.out::println));
     }
